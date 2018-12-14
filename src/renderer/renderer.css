@@ -1,0 +1,22 @@
+html { height: 100vh }
+body { height: 100% }
+
+.main-container {
+    height: 100%
+}
+
+.panel-container {
+    height: 100%
+}
+
+.color-code-box {
+    height: 30px;
+}
+
+.color-code-box:hover {
+    cursor: pointer;
+}
+
+.link-pointer:hover {
+    cursor: pointer;
+}
