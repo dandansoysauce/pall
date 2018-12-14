@@ -1,6 +1,6 @@
 {
   "name": "pall",
-  "description": "Pick a color anywhere.",
+  "description": "Pick a color. Anywhere.",
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
