@@ -10,6 +10,8 @@ test_script:
   - yarn --version
   - yarn run dist
 
+build: off
+
 deploy:
   description: 'Pick a color. Anywhere'
   provider: Github
