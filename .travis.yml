@@ -18,4 +18,4 @@ deploy:
   channel: edge
   skip_cleanup: true
   on:
-    os: 'linux'
+    os: linux
