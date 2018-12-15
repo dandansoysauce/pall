@@ -37,15 +37,14 @@
       "publish": "github"
     },
     "linux": {
-      "category": "Utility",
-      "target": [
-        {
-          "target": "snap",
-          "arch": ["x64"],
-          "artifactName": "${name}.${ext}"
-        }
-      ],
+      "target": "deb",
       "publish": "github"
+    },
+    "AppImage": {
+      "publish": "github"
+    },
+    "snap": {
+      "artifactName": "${name}.${ext}"
     }
   },
   "repository": {
