@@ -1,4 +1,4 @@
-# ![pall icon](https://raw.githubusercontent.com/dandansoysauce/pall/master/src/main/images/icon.png "pall icon") Pall
+# ![pall icon](https://raw.githubusercontent.com/dandansoysauce/pall/master/src/main/images/icon.png "pall icon") Pall [![Build Status](https://travis-ci.org/dandansoysauce/pall.svg?branch=master)](https://travis-ci.org/dandansoysauce/pall) [![Build status](https://ci.appveyor.com/api/projects/status/2f5ymuc0h94xsman?svg=true)](https://ci.appveyor.com/project/dandansoysauce/pall) [![Snap Status](https://build.snapcraft.io/badge/dandansoysauce/pall.svg)](https://build.snapcraft.io/user/dandansoysauce/pall)
 
 Pick a color. Anywhere.
 
