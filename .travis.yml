@@ -16,6 +16,10 @@ deploy:
     - "dist/pall-*-x86_64.AppImage"
     - "dist/pall-*-mac.zip"
     - "dist/pall-*.dmg"
+  provider: snap
+  snap: 'dist/pall_*_amd64.snap'
+  channel: stable
+  skip_clean: true
   on:
     repo: dandansoysauce/pall
     tags: true
