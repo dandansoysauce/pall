@@ -23,5 +23,9 @@
     "electron-builder": "^20.36.2",
     "electron-webpack": "^2.6.1",
     "webpack": "^4.26.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dandansoysauce/pall"
   }
 }
