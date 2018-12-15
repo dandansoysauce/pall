@@ -20,4 +20,3 @@ deploy:
   artifact: /.*\.exe/
   on:
     branch: master
-    appveyor_repo_tag: true
