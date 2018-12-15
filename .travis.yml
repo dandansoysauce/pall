@@ -9,7 +9,7 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: $GH_KEY
+    secure: A5/HBnqMVgTeFAFkibawc8BKP86OlN7Aoglf7LVdM9BmjpAD/+aiQFqIbgIdzxrk4NkIhVXw2SOmrg/dI9B8wQll3j9OIhJ5+C5maBK3QZa0SDFNSlv907DVpc/93xFw9auAWnf/2Os6QN+FxFRm42qHRRecUrZKwGnwG6DYyz/c543FzRNMinA8nDVn2HUOFh1tv+1UHh1jKf2PBsAomnPGGJKk5U1O5IQvlKyt5CuoAWID8/aniAe/vjzLbZpiGt0BTEO0lt+uTGRPT3NPVXa6n1uBZkIZHjxaqBgUSxaeLbiw37mvjU/DjYKVYMGXRdrb4w8ovLjwm7zVOYFEYVgwFwri2y09gcam0BXPUE7AAoJF7G9l9lL1WHtmIkigMvp1/+NIbkVcPN5qJDapdDtHSpgjykmFStI+rwmOmJEXMbIixM/80R99WMGsvqC8yqVmNRzC4V2yL/Jrokma8lLcBRnbGCq9dfTfBPZBqgu8q9kkvW8DbjqPbjc6MUYDxAT/vazlVrgskJUaYEWXqnrMDujpJzVnFYUusozuPLLU3ayqwlBdInyZFldvvyBcHL9yPt/hO15L4kHFSyenbVNtkn/McZUpC+9/i1On7VW/zdJM+E7JJ3c80NEXdaPeO0TKrbRKpUE5GLCZ6NqFoDIzWK010kjy8agNHp0qjOY=
   file:
     - "dist/pall_*_amd64.snap"
     - "dist/pall-*-x86_64.AppImage"
