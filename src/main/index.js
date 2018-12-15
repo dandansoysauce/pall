@@ -42,7 +42,8 @@ function createMainWindow() {
     x: mainWindowState.x,
     y: mainWindowState.y,
     width: mainWindowState.width,
-    height: mainWindowState.height
+    height: mainWindowState.height,
+    icon: './images/icon.png'
   })
 
   window.setMenuBarVisibility(false)
