@@ -9,6 +9,6 @@ script:
 - yarn run dist
 deploy:
   provider: snap
-  snap: "dist/pall_*_amd64.snap"
+  snap: "dist/pall.snap"
   channel: edge
   skip_clean: true

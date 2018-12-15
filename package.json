@@ -54,7 +54,8 @@
           ]
         },
         {
-          "target": "snap"
+          "target": "snap",
+          "artifactName": "${name}.${ext}"
         }
       ],
       "publish": "github"
