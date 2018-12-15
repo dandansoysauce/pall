@@ -1,4 +1,4 @@
-# Pall
+# ![pall icon](https://raw.githubusercontent.com/dandansoysauce/pall/master/src/main/images/icon.png "pall icon") Pall
 
 Pick a color. Anywhere.
 
