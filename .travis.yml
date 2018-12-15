@@ -4,6 +4,10 @@ os:
 - osx
 node_js:
 - node
+addons:
+  apt:
+    packages:
+      - snapd
 script:
 - yarn install
 - yarn run dist
