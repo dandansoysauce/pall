@@ -16,6 +16,6 @@ deploy:
     - "dist/pall-*-mac.zip"
     - "dist/pall-*.dmg"
   skip_cleanup: true
-  draft: true
   on:
     repo: dandansoysauce/pall
+    tags: true
