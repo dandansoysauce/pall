@@ -33,7 +33,7 @@
     "mac": {
       "publish": "github"
     },
-    "windows": {
+    "win": {
       "publish": "github"
     },
     "linux": {
