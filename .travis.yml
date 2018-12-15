@@ -5,8 +5,8 @@ os:
 node_js:
 - node
 script:
-# - yarn install
-# - yarn run dist
+- yarn install
+- yarn run dist
 deploy:
   provider: snap
   snap: pall.snap

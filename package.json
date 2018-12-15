@@ -40,20 +40,6 @@
       "category": "Utility",
       "target": [
         {
-          "target": "deb",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        },
-        {
           "target": "snap",
           "arch": ["x64"],
           "artifactName": "${name}.${ext}"
