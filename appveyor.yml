@@ -11,12 +11,3 @@ test_script:
   - yarn run dist
 
 build: off
-
-deploy:
-  description: 'Pick a color. Anywhere'
-  provider: GitHub
-  auth_token:
-    secure: j2bKpbxlfzqppu+CEeoJROgO8ZSv1qJXm9r1LCy4zQL/Y1rhMZZfdhcSm+J+bqmG
-  artifact: /.*\.exe/
-  on:
-    branch: master

@@ -30,6 +30,12 @@
   },
   "build": {
     "appId": "com.daniona.pall",
+    "mac": {
+      "publish": "github"
+    },
+    "windows": {
+      "publish": "github"
+    },
     "linux": {
       "category": "Utility",
       "target": [
@@ -50,7 +56,8 @@
         {
           "target": "snap"
         }
-      ]
+      ],
+      "publish": "github"
     }
   },
   "repository": {

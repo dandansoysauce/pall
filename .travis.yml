@@ -8,20 +8,7 @@ script:
 - yarn install
 - yarn run dist
 deploy:
-  provider: releases
-  api_key:
-    secure: VPTcmHiW6uag4eYk4D9Yc1UepuXPwlOcDEiiJZCodCZq6ab/ipMJkg5/2IFpTg/Q4LB1XeaMNvuly3Z9uFnXc7gTje8PTY9R17tu0c3S33bdElWywygzK46nDvBDpZEfXEdoCfahXgt04qdktmznJa+sJNPrbO5yuCGckHPIUi3mmAYekbt1oyYAP5CpTWMDXwBBNwOm65VYmRrKLFHcKBMvxm67cdVyw9cS5H6IUQWDoUd+D4PVyPbFgIKoC2c+W53e8bxnPcH85riBmN+hPWBRaR54qhvS556nd0XvTW1kxKBvRXgYurwobBtPZzLri/IlPXMtPisamcVnAfXwpacunP3A3qzDVBN5Ka242LMXgSgi7nEv5rDdVbPcOQfp8uMjOGwhCfeBqcwztsGZ8nx/DGlsOsy2bYQ11uF2z3+iJIRqM/v4cv4h6Anx1z50rWT3KPLK01W3HAb83Ep4hbBRr4mxol2VNNY5nBRjlhhebxLmj7JDbXiWslcMb04BuVP3DY34xepboZW1htQvpdgzdpH6qNB3nsGzEmSGNXVJ2CMy8Q+/DNnPaY6e1y9TAABRdeWPx1HKxHyNeu9OQ6FkPHoKLYda/KQa3VEtVeyDkQEP+GzYHVClOjjzeVkk4uzCOYzFYH1WIB7P0G00lI5sS4P1yiuG8Z6hW688bOQ=
-  file:
-    - "dist/pall_*_amd64.deb"
-    - "dist/pall_*_i386.deb"
-    - "dist/pall-*-x86_64.AppImage"
-    - "dist/pall-*-i386.AppImage"
-    - "dist/pall-*-mac.zip"
-    - "dist/pall-*.dmg"
   provider: snap
   snap: "dist/pall_*_amd64.snap"
   channel: edge
   skip_clean: true
-  on:
-    repo: dandansoysauce/pall
-    tags: true
