@@ -1,6 +1,7 @@
 {
   "name": "pall",
   "description": "Pick a color. Anywhere.",
+  "author": {"name": "Dani A. Ona", "url": "https:://dandansoysauce.github.io"},
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
