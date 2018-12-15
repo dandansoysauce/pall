@@ -16,6 +16,6 @@ deploy:
     - "dist/pall-*-x86_64.AppImage"
     - "dist/pall-*-mac.zip"
     - "dist/pall-*.dmg"
-  draft: true
   on:
     repo: dandansoysauce/pall
+    tags: true
