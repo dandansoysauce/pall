@@ -1,8 +1,21 @@
 language: node_js
 os:
- - linux
- - osx
+- linux
+- osx
 node_js:
- - "node"
+- node
 script:
- - yarn run dist
+- yarn run dist
+deploy:
+  provider: releases
+  api_key:
+    secure: $GH_KEY
+  file:
+    - "dist/pall_*_amd64.snap"
+    - "dist/pall-*-x86_64.AppImage"
+    - "dist/pall-*-mac.zip"
+    - "dist/pall-*.dmg"
+  skip_cleanup: true
+  draft: true
+  on:
+    repo: dandansoysauce/pall
