@@ -17,3 +17,5 @@ deploy:
   snap: dist/pall.snap
   channel: edge
   skip_cleanup: true
+  on:
+    os: 'linux'
