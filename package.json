@@ -37,11 +37,8 @@
       "publish": "github"
     },
     "linux": {
-      "target": "deb",
+      "artifactName": "${name}.${ext}",
       "publish": "github"
-    },
-    "snap": {
-      "artifactName": "${name}.${ext}"
     }
   },
   "repository": {
