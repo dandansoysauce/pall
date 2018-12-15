@@ -40,9 +40,6 @@
       "target": "deb",
       "publish": "github"
     },
-    "AppImage": {
-      "publish": "github"
-    },
     "snap": {
       "artifactName": "${name}.${ext}"
     }
