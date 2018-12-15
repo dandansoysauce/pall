@@ -1,0 +1,21 @@
+environment:
+  nodejs_version: "10"
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - yarn install
+
+test_script:
+  - node --version
+  - yarn --version
+  - yarn run dist
+
+deploy:
+  description: 'Pick a color. Anywhere'
+  provider: Github
+  auth_token:
+    secure: Cj2uj8AvOGYRw+Rew823G3Colx4p7CmgXZy44negoFJ4D7oLg7s6DtsbOtmJzzE8
+  artifact: /.*\.exe/
+  draft: true
+  on:
+    branch: master
