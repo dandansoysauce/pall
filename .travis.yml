@@ -9,13 +9,12 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: A5/HBnqMVgTeFAFkibawc8BKP86OlN7Aoglf7LVdM9BmjpAD/+aiQFqIbgIdzxrk4NkIhVXw2SOmrg/dI9B8wQll3j9OIhJ5+C5maBK3QZa0SDFNSlv907DVpc/93xFw9auAWnf/2Os6QN+FxFRm42qHRRecUrZKwGnwG6DYyz/c543FzRNMinA8nDVn2HUOFh1tv+1UHh1jKf2PBsAomnPGGJKk5U1O5IQvlKyt5CuoAWID8/aniAe/vjzLbZpiGt0BTEO0lt+uTGRPT3NPVXa6n1uBZkIZHjxaqBgUSxaeLbiw37mvjU/DjYKVYMGXRdrb4w8ovLjwm7zVOYFEYVgwFwri2y09gcam0BXPUE7AAoJF7G9l9lL1WHtmIkigMvp1/+NIbkVcPN5qJDapdDtHSpgjykmFStI+rwmOmJEXMbIixM/80R99WMGsvqC8yqVmNRzC4V2yL/Jrokma8lLcBRnbGCq9dfTfBPZBqgu8q9kkvW8DbjqPbjc6MUYDxAT/vazlVrgskJUaYEWXqnrMDujpJzVnFYUusozuPLLU3ayqwlBdInyZFldvvyBcHL9yPt/hO15L4kHFSyenbVNtkn/McZUpC+9/i1On7VW/zdJM+E7JJ3c80NEXdaPeO0TKrbRKpUE5GLCZ6NqFoDIzWK010kjy8agNHp0qjOY=
+    secure: VPTcmHiW6uag4eYk4D9Yc1UepuXPwlOcDEiiJZCodCZq6ab/ipMJkg5/2IFpTg/Q4LB1XeaMNvuly3Z9uFnXc7gTje8PTY9R17tu0c3S33bdElWywygzK46nDvBDpZEfXEdoCfahXgt04qdktmznJa+sJNPrbO5yuCGckHPIUi3mmAYekbt1oyYAP5CpTWMDXwBBNwOm65VYmRrKLFHcKBMvxm67cdVyw9cS5H6IUQWDoUd+D4PVyPbFgIKoC2c+W53e8bxnPcH85riBmN+hPWBRaR54qhvS556nd0XvTW1kxKBvRXgYurwobBtPZzLri/IlPXMtPisamcVnAfXwpacunP3A3qzDVBN5Ka242LMXgSgi7nEv5rDdVbPcOQfp8uMjOGwhCfeBqcwztsGZ8nx/DGlsOsy2bYQ11uF2z3+iJIRqM/v4cv4h6Anx1z50rWT3KPLK01W3HAb83Ep4hbBRr4mxol2VNNY5nBRjlhhebxLmj7JDbXiWslcMb04BuVP3DY34xepboZW1htQvpdgzdpH6qNB3nsGzEmSGNXVJ2CMy8Q+/DNnPaY6e1y9TAABRdeWPx1HKxHyNeu9OQ6FkPHoKLYda/KQa3VEtVeyDkQEP+GzYHVClOjjzeVkk4uzCOYzFYH1WIB7P0G00lI5sS4P1yiuG8Z6hW688bOQ=
   file:
     - "dist/pall_*_amd64.snap"
     - "dist/pall-*-x86_64.AppImage"
     - "dist/pall-*-mac.zip"
     - "dist/pall-*.dmg"
-  skip_cleanup: true
   on:
     repo: dandansoysauce/pall
     tags: true
