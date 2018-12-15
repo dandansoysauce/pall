@@ -52,12 +52,13 @@
             "x64",
             "ia32"
           ]
+        },
+        {
+          "target": "snap",
+          "arch": ["x64"],
+          "artifactName": "${name}.${ext}"
         }
       ],
-      "publish": "github"
-    },
-    "snap": {
-      "artifactName": "${name}.${ext}",
       "publish": "github"
     }
   },
