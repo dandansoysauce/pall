@@ -43,7 +43,7 @@ function createMainWindow() {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    icon: './images/icon.png'
+    icon: path.join(__dirname, '../../build', 'icon.png')
   })
 
   window.setMenuBarVisibility(false)
@@ -111,7 +111,7 @@ function getLastColorToClipboard() {
 
 app.on('ready', () => {
   mainWindow = createMainWindow()
-  tray = new Tray(path.join(__dirname, 'images/icon.png'))
+  tray = new Tray(path.join(__dirname, '../../build', 'icon.png'))
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Restore Window', click: function () { mainWindow.show() }},
     {label: 'Copy Last Color', click: function () {
