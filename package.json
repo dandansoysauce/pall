@@ -12,7 +12,6 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
     "dist": "yarn compile && electron-builder",
-    "dist:snap": "yarn compile && electron-builder --linux snap --x64",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null"
   },
   "dependencies": {
@@ -40,9 +39,9 @@
     },
     "linux": {
       "target": [
+        { "target": "snap" },
         { "target": "AppImage", "arch": ["x64", "ia32"] },
-        { "target": "deb", "arch": ["x64", "ia32"] },
-        { "target": "snap", "arch": ["x64", "ia32"] }
+        { "target": "deb", "arch": ["x64", "ia32"] }
       ],
       "publish": "github"
     }
