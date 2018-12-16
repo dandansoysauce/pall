@@ -24,11 +24,15 @@ function init() {
     })
 
     ipcRenderer.on('capture', (event, args) => {
+        let displayHeight = 0
+        let displayWidth = 0
         const allDisplays = screen.getAllDisplays()
         const primaryDisplay = screen.getPrimaryDisplay()
+        if (primaryDisplay) {
+            displayHeight = primaryDisplay.size.height
+            displayWidth = primaryDisplay.size.width
+        }
         const point = screen.getCursorScreenPoint()
-        let displayHeight = primaryDisplay.size.height
-        let displayWidth = primaryDisplay.size.width
         if (allDisplays.length > 1) {
             displayWidth = 0
             displayHeight = Math.max.apply(Math, allDisplays.map(function (o) { return o.size.height }))
@@ -44,17 +48,17 @@ function init() {
             if (error) throw error
         
             for (let i = 0; i < sources.length; ++i) {
-            if (sources[i].name.toLocaleLowerCase() === 'entire screen') {
-                Jimp.read(sources[i].thumbnail.toPNG(), (err, img) => {
-                    if (err) return console.log(err)
+                if (sources[i].name.toLocaleLowerCase() === 'entire screen') {
+                    Jimp.read(sources[i].thumbnail.toPNG(), (err, img) => {
+                        if (err) return console.log(err)
 
-                    const pixelColor = img.getPixelColor(point.x, point.y)
-                    const rgbaColor = Jimp.intToRGBA(pixelColor)
-                    const hexColorString = `#${componentToHex(rgbaColor.r)}${componentToHex(rgbaColor.g)}${componentToHex(rgbaColor.b)}`
-                    clipboard.writeText(hexColorString)
-                    pushColor(hexColorString)
-                })
-            }
+                        const pixelColor = img.getPixelColor(point.x, point.y)
+                        const rgbaColor = Jimp.intToRGBA(pixelColor)
+                        const hexColorString = `#${componentToHex(rgbaColor.r)}${componentToHex(rgbaColor.g)}${componentToHex(rgbaColor.b)}`
+                        clipboard.writeText(hexColorString)
+                        pushColor(hexColorString)
+                    })
+                }
             }
         })
     })
