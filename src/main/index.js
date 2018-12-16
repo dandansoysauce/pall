@@ -20,6 +20,8 @@ if (autoStartToTray) {
 
     autoLauncher.enable()
   })
+} else {
+  autoLauncher.disable()
 }
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -43,7 +45,7 @@ function createMainWindow() {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    icon: path.join(__dirname, '../../build', 'icon-mini.png'),
+    icon: path.join(__dirname, '../../meta/gui', 'icon.png'),
     title: 'Pall - Color Picker'
   })
 
@@ -74,6 +76,8 @@ function createMainWindow() {
       ev.preventDefault()
       window.hide()
     }
+
+    mainWindow.webContents.send('closewindow', 'close this window')
   })
 
   window.webContents.on('devtools-opened', () => {
@@ -112,7 +116,7 @@ function getLastColorToClipboard() {
 
 app.on('ready', () => {
   mainWindow = createMainWindow()
-  tray = new Tray(path.join(__dirname, '../../build', 'icon-mini.png'))
+  tray = new Tray(path.join(__dirname, '../../meta/gui', 'icon.png'))
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Restore Window', click: function () { mainWindow.show() }},
     {label: 'Copy Last Color', click: function () {

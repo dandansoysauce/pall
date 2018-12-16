@@ -1,22 +1,62 @@
 'use strict';
-const { ipcRenderer, clipboard, shell} = require('electron')
+const { ipcRenderer, clipboard, shell, desktopCapturer, screen } = require('electron')
 const Store = require('electron-store')
-var colorHelper = require('../utils/color.util')
+const Jimp = require('jimp')
+const hex2rgb = require('hex2rgb')
 require('./renderer.css')
 const styles = document.createElement('style')
 styles.innerText = `@import url(https://unpkg.com/spectre.css/dist/spectre-icons.css);@import url(https://unpkg.com/spectre.css/dist/spectre.min.css);`
 const vueScript = document.createElement('script')
 vueScript.setAttribute('type', 'text/javascript'), vueScript.setAttribute('src', 'https://unpkg.com/vue'), vueScript.onload = init, document.head.appendChild(vueScript), document.head.appendChild(styles)
 
+const store = new Store()
+let getColorsFromStore = store.get('colors') ? store.get('colors') : []
+
+function pushColor(color) {
+    const foreground = hex2rgb(color).yiq
+    const colorObj = { code: color, date: new Date().toLocaleString(), fg: foreground }
+    getColorsFromStore.unshift(colorObj)
+}
+
 function init() {
-    const store = new Store()
-    const getColorsFromStore = store.get('colors') ? store.get('colors') : []
+    ipcRenderer.on('closewindow', (event, args) => {
+        store.set('colors', getColorsFromStore)
+    })
 
     ipcRenderer.on('capture', (event, args) => {
-        colorHelper.getPixelColor()
-        setTimeout(() => {
-            myVue.colors = store.get('colors')
-        }, 500)
+        const allDisplays = screen.getAllDisplays()
+        const primaryDisplay = screen.getPrimaryDisplay()
+        const point = screen.getCursorScreenPoint()
+        let displayHeight = primaryDisplay.size.height
+        let displayWidth = primaryDisplay.size.width
+        if (allDisplays.length > 1) {
+            displayWidth = 0
+            displayHeight = Math.max.apply(Math, allDisplays.map(function (o) { return o.size.height }))
+            allDisplays.forEach(display => {
+                displayWidth = displayWidth + display.size.width
+            })
+        }
+        const componentToHex = c => {
+            const hex = c.toString(16)
+            return hex.length === 1 ? "0" + hex : hex
+        }
+        desktopCapturer.getSources({types: ['screen'], thumbnailSize: {width: displayWidth, height: displayHeight}}, (error, sources) => {
+            if (error) throw error
+        
+            for (let i = 0; i < sources.length; ++i) {
+            if (sources[i].name.toLocaleLowerCase() === 'entire screen') {
+                Jimp.read(sources[i].thumbnail.toPNG(), (err, img) => {
+                    if (err) return console.log(err)
+
+                    const pixelColor = img.getPixelColor(point.x, point.y)
+                    const rgbaColor = Jimp.intToRGBA(pixelColor)
+                    const hexColorString = `#${componentToHex(rgbaColor.r)}${componentToHex(rgbaColor.g)}${componentToHex(rgbaColor.b)}`
+                    clipboard.writeText(hexColorString)
+                    pushColor(hexColorString)
+                })
+            }
+            }
+        })
     })
 
     var myVue = new Vue({
@@ -33,12 +73,10 @@ function init() {
                     document.getElementById('copy-toast').style.display = 'none'
                 }, 3000)
             },
-            clearHistory: () => {
-                colorHelper.clearStore()
-                const colorsCont = document.getElementById('colors-container')
-                while (colorsCont.firstChild) {
-                    colorsCont.removeChild(colorsCont.firstChild)
-                }
+            clearHistory () {
+                store.delete('colors')
+                getColorsFromStore = []
+                this.colors = getColorsFromStore
             },
             showSettings: () => {
                 document.getElementById('settings-modal').classList.add('active')
