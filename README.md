@@ -2,11 +2,21 @@
 
 Pick a color. Anywhere.
 
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/pall)
+
 ## Usage
 
 Point and <kbd>ctrl + shift + c</kbd> - copies the color to the clipboard and saves it.
 
 <kbd>ctrl + shift + z</kbd> - copies the last picked color.
+
+## Dependencies
+
+* [Teamwork/node-auto-launch](https://github.com/Teamwork/node-auto-launch)
+* [sindresorhus/electron-store](https://github.com/sindresorhus/electron-store)
+* [mawie81/electron-window-state](https://github.com/mawie81/electron-window-state)
+* [oliver-moran/jimp](https://github.com/oliver-moran/jimp)
+* [glnster/hex2rgb](https://github.com/glnster/hex2rgb)
 
 ### Development Scripts
 
