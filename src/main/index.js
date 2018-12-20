@@ -9,7 +9,7 @@ const AutoLaunch = require('auto-launch')
 const windowStateKeeper = require('electron-window-state')
 let appIcon = null
 if (process.env.SNAP) {
-  appIcon = nativeImage.createFromPath('meta/gui/icon.png')
+  appIcon = path.join(__dirname, '../../', 'meta/gui/icon.png')
 } else {
   appIcon = nativeImage.createFromPath('build/icon-mini.png')
 }
