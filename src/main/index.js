@@ -1,28 +1,20 @@
 'use strict'
 
-import { app, BrowserWindow, globalShortcut, ipcMain, Tray, Menu, clipboard } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, Tray, Menu, clipboard, nativeImage } from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
 const Store = require('electron-store')
 const store = new Store()
-var AutoLaunch = require('auto-launch')
-const windowStateKeeper = require('electron-window-state');
+const AutoLaunch = require('auto-launch')
+const fs = require('fs')
+const windowStateKeeper = require('electron-window-state')
+const appIcon = nativeImage.createFromPath('build/icon-mini.png')
 
 const autoStartToTray = store.get('settings.autostartToTray') ? store.get('settings.autostartToTray') : false
 
 var autoLauncher = new AutoLaunch({
   name: 'pall'
 })
-
-if (autoStartToTray) {
-  autoLauncher.isEnabled().then(isEnabled => {
-    if (isEnabled) return
-
-    autoLauncher.enable()
-  })
-} else {
-  autoLauncher.disable()
-}
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -45,7 +37,7 @@ function createMainWindow() {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
-    icon: path.join(__dirname, '../../meta/gui', 'icon.png'),
+    icon: appIcon,
     title: 'Pall - Color Picker'
   })
 
@@ -64,6 +56,16 @@ function createMainWindow() {
       protocol: 'file',
       slashes: true
     }))
+
+    if (autoStartToTray) {
+      autoLauncher.isEnabled().then(isEnabled => {
+        if (isEnabled) return
+    
+        autoLauncher.enable()
+      })
+    } else {
+      autoLauncher.disable()
+    }
   }
 
   window.on('closed', () => {
@@ -116,7 +118,7 @@ function getLastColorToClipboard() {
 
 app.on('ready', () => {
   mainWindow = createMainWindow()
-  tray = new Tray(path.join(__dirname, '../../meta/gui', 'icon.png'))
+  tray = new Tray(appIcon)
   const contextMenu = Menu.buildFromTemplate([
     {label: 'Restore Window', click: function () { mainWindow.show() }},
     {label: 'Copy Last Color', click: function () {
