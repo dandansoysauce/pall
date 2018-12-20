@@ -8,6 +8,7 @@ const styles = document.createElement('style')
 styles.innerText = `@import url(https://unpkg.com/spectre.css/dist/spectre-icons.css);@import url(https://unpkg.com/spectre.css/dist/spectre.min.css);`
 const vueScript = document.createElement('script')
 vueScript.setAttribute('type', 'text/javascript'), vueScript.setAttribute('src', 'https://unpkg.com/vue'), vueScript.onload = init, document.head.appendChild(vueScript), document.head.appendChild(styles)
+const ifSnap = process.env.SNAP
 
 const store = new Store()
 let getColorsFromStore = store.get('colors') ? store.get('colors') : []
@@ -66,6 +67,7 @@ function init() {
     var myVue = new Vue({
         data: {
             colors: getColorsFromStore,
+            autoStartOpt: ifSnap,
             minimizeToTrayOnExit: store.get('settings.minimizeToTrayOnExit') ? store.get('settings.minimizeToTrayOnExit') : false,
             autostartToTray: store.get('settings.autostartToTray') ? store.get('settings.autostartToTray') : false
         },
@@ -110,6 +112,10 @@ function init() {
 
                 </div>
                 <div class="panel-body">
+                    <div class="center-info" v-if="this.colors.length === 0">
+                        <p><b>Point</b> and <kbd>control/command + shift + c</kbd> to pick a color.</p>
+                        <p><kbd>control/command + shift + z</kbd> to copy last picked color.</p>
+                    </div>
                     <div class="container">
                         <div id="colors-container" class="columns">
                             <div class="column col-4 color-code-box" v-for="color in colors" v-on:click="copyToClipboard(color.code)" v-bind:style="{ backgroundColor: color.code, color: color.fg }">
@@ -136,7 +142,7 @@ function init() {
                     <div class="modal-body">
                         <div class="content">
                             <div class="form-group">
-                                <label class="form-switch">
+                                <label class="form-switch" v-if="!this.autoStartOpt">
                                     <input type="checkbox" v-model="autostartToTray">
                                     <i class="form-icon"></i> Auto-start to tray
                                 </label>

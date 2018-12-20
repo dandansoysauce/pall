@@ -6,7 +6,6 @@ import { format as formatUrl } from 'url'
 const Store = require('electron-store')
 const store = new Store()
 const AutoLaunch = require('auto-launch')
-const fs = require('fs')
 const windowStateKeeper = require('electron-window-state')
 const appIcon = nativeImage.createFromPath('build/icon-mini.png')
 
