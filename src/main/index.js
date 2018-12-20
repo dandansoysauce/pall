@@ -7,7 +7,12 @@ const Store = require('electron-store')
 const store = new Store()
 const AutoLaunch = require('auto-launch')
 const windowStateKeeper = require('electron-window-state')
-const appIcon = nativeImage.createFromPath('build/icon-mini.png')
+let appIcon = null
+if (process.env.SNAP) {
+  appIcon = nativeImage.createFromPath('meta/gui/icon.png')
+} else {
+  appIcon = nativeImage.createFromPath('build/icon-mini.png')
+}
 
 const autoStartToTray = store.get('settings.autostartToTray') ? store.get('settings.autostartToTray') : false
 
