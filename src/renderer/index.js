@@ -8,8 +8,8 @@ const styles = document.createElement('style')
 styles.innerText = `@import url(https://unpkg.com/spectre.css/dist/spectre-icons.css);@import url(https://unpkg.com/spectre.css/dist/spectre.min.css);`
 const vueScript = document.createElement('script')
 vueScript.setAttribute('type', 'text/javascript'), vueScript.setAttribute('src', 'https://unpkg.com/vue'), vueScript.onload = init, document.head.appendChild(vueScript), document.head.appendChild(styles)
-const ifSnap = process.env.SNAP
 
+const ifSnap = process.env.SNAP
 const store = new Store()
 let getColorsFromStore = store.get('colors') ? store.get('colors') : []
 
@@ -17,6 +17,26 @@ function pushColor(color) {
     const foreground = hex2rgb(color).yiq
     const colorObj = { code: color, date: new Date().toLocaleString(), fg: foreground }
     getColorsFromStore.unshift(colorObj)
+}
+
+let keyboardTimeout, keyboardOpt;
+const keyboardJS = require('keyboardjs')
+keyboardJS.bind('', e => {
+    if (keyboardTimeout !== undefined) clearTimeout(keyboardTimeout)
+    keyboardTimeout = setTimeout(() => { mykeyboard(e) }, 1000)
+})
+keyboardJS.pause()
+
+function mykeyboard(e) {
+    if (keyboardOpt !== undefined) {
+        if (keyboardOpt === 'color_pick') {
+            console.log('color pick shortcut', e)
+        } else if (keyboardOpt === 'last_pick') {
+            console.log('last pick shortcut', e)
+        }
+    }
+
+    keyboardJS.pause()
 }
 
 function init() {
@@ -68,6 +88,8 @@ function init() {
         data: {
             colors: getColorsFromStore,
             autoStartOpt: ifSnap,
+            globalColorPick: store.get('shortuct.colorPick') ? store.get('shortuct.colorPick') : 'CommandOrControl+Shift+C',
+            globalPickLast: store.get('shortuct.pickLast') ? store.get('shortuct.pickLast') : 'CommandOrControl+Shift+Z',
             minimizeToTrayOnExit: store.get('settings.minimizeToTrayOnExit') ? store.get('settings.minimizeToTrayOnExit') : false,
             autostartToTray: store.get('settings.autostartToTray') ? store.get('settings.autostartToTray') : false
         },
@@ -91,12 +113,21 @@ function init() {
                 document.getElementById('settings-modal').classList.remove('active')
             },
             saveSettings () {
+                keyboardJS.pause()
                 store.set('settings.autostartToTray', this.autostartToTray)
                 store.set('settings.minimizeToTrayOnExit', this.minimizeToTrayOnExit)
                 document.getElementById('settings-modal').classList.remove('active')
             },
             openGithub () {
                 shell.openExternal('https://github.com')
+            },
+            colorPickShortcutChange () {
+                keyboardOpt = 'color_pick'
+                keyboardJS.resume()
+            },
+            lastPickShortcutChange () {
+                keyboardOpt = 'last_pick'
+                keyboardJS.resume()
             }
         },
         template: `
@@ -113,8 +144,8 @@ function init() {
                 </div>
                 <div class="panel-body">
                     <div class="center-info" v-if="this.colors.length === 0">
-                        <p><b>Point</b> and <kbd>control/command + shift + c</kbd> to pick a color.</p>
-                        <p><kbd>control/command + shift + z</kbd> to copy last picked color.</p>
+                        <p><b>Point</b> and <kbd>{{ this.globalColorPick }}</kbd> to pick a color.</p>
+                        <p><kbd>{{ this.globalPickLast }}</kbd> to copy last picked color.</p>
                     </div>
                     <div class="container">
                         <div id="colors-container" class="columns">
@@ -150,6 +181,16 @@ function init() {
                                     <input type="checkbox" v-model="minimizeToTrayOnExit">
                                     <i class="form-icon"></i> Minimize to tray on exit
                                 </label>
+                                <label>Color Pick Shortcut</label>
+                                <div class="input-group" style="margin-bottom: 10px;">
+                                    <span class="input-group-addon shortcut-span">{{ this.globalColorPick }}</span>
+                                    <button class="btn btn-primary input-group-btn" v-on:click="colorPickShortcutChange">Change</button>
+                                </div>
+                                <label>Last Pick Shortcut</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon shortcut-span">{{ this.globalPickLast }}</span>
+                                    <button class="btn btn-primary input-group-btn" v-on:click="lastPickShortcutChange">Change</button>
+                                </div>
                             </div>
                         </div>
                     </div>

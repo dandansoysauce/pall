@@ -4371,10 +4371,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-keyscan@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/keyscan/-/keyscan-1.7.0.tgz#99386a58c858ba2abe2f515862128a5b299b9420"
-  integrity sha1-mThqWMhYuiq+L1FYYhKKWymblCA=
+keyboardjs@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/keyboardjs/-/keyboardjs-2.5.1.tgz#2eb5d96bd1028e07136cd71919f607579edca716"
+  integrity sha512-mRf7MQMiFcudADEpPn3vTtl/rtFELo5MAiKA6yH4ShsFsnwwjMrVfaNt6bpYhBDeODs/T5NXwltz4+ktRQyP7A==
 
 killable@^1.0.0:
   version "1.0.1"

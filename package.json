@@ -20,7 +20,7 @@
     "electron-window-state": "^5.0.3",
     "hex2rgb": "^2.2.0",
     "jimp": "^0.6.0",
-    "keyscan": "^1.7.0",
+    "keyboardjs": "^2.5.1",
     "source-map-support": "^0.5.9"
   },
   "devDependencies": {

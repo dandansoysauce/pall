@@ -28,3 +28,8 @@ body { height: 100% }
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+.shortcut-span {
+    width: 100%;
+    font-size: 13px;
+}

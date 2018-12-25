@@ -14,6 +14,8 @@ if (process.env.SNAP) {
   appIcon = nativeImage.createFromPath('build/icon-mini.png')
 }
 
+const globalColorPick = store.get('shortuct.colorPick') ? store.get('shortuct.colorPick') : 'CommandOrControl+Shift+C'
+const globalPickLast = store.get('shortuct.pickLast') ? store.get('shortuct.pickLast') : 'CommandOrControl+Shift+Z'
 const autoStartToTray = store.get('settings.autostartToTray') ? store.get('settings.autostartToTray') : false
 
 var autoLauncher = new AutoLaunch({
@@ -134,11 +136,11 @@ app.on('ready', () => {
   tray.setContextMenu(contextMenu)
 
   mainWindow.webContents.once('dom-ready', () => {
-    const shortcuts = globalShortcut.register('CommandOrControl+Shift+C', () => {
+    const shortcuts = globalShortcut.register(globalColorPick, () => {
       mainWindow.webContents.send('capture', 'captureCursor')
     })
 
-    const lastColor = globalShortcut.register('CommandOrControl+Shift+Z', () => {
+    const lastColor = globalShortcut.register(globalPickLast, () => {
       getLastColorToClipboard()
     })
   
