@@ -1,5 +1,6 @@
 'use strict';
 const { ipcRenderer, clipboard, shell, desktopCapturer, screen } = require('electron')
+const remote = require('electron').remote
 const Store = require('electron-store')
 const Jimp = require('jimp')
 const hex2rgb = require('hex2rgb')
@@ -117,6 +118,12 @@ function init() {
                 store.set('settings.autostartToTray', this.autostartToTray)
                 store.set('settings.minimizeToTrayOnExit', this.minimizeToTrayOnExit)
                 document.getElementById('settings-modal').classList.remove('active')
+
+                if (keyboardOpt !== undefined) {
+                    keyboardOpt = undefined
+                    remote.app.relaunch()
+                    remote.app.exit()
+                }
             },
             openGithub () {
                 shell.openExternal('https://github.com')
