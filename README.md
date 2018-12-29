@@ -19,6 +19,7 @@ Point and <kbd>ctrl + shift + c</kbd> - copies the color to the clipboard and sa
 * [mawie81/electron-window-state](https://github.com/mawie81/electron-window-state)
 * [oliver-moran/jimp](https://github.com/oliver-moran/jimp)
 * [glnster/hex2rgb](https://github.com/glnster/hex2rgb)
+* [RobertWHurst/KeyboardJS](https://github.com/RobertWHurst/KeyboardJS)
 
 ### Development Scripts
 

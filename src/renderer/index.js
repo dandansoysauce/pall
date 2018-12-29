@@ -1,5 +1,6 @@
 'use strict';
 const { ipcRenderer, clipboard, shell, desktopCapturer, screen } = require('electron')
+const remote = require('electron').remote
 const Store = require('electron-store')
 const Jimp = require('jimp')
 const hex2rgb = require('hex2rgb')
@@ -8,8 +9,8 @@ const styles = document.createElement('style')
 styles.innerText = `@import url(https://unpkg.com/spectre.css/dist/spectre-icons.css);@import url(https://unpkg.com/spectre.css/dist/spectre.min.css);`
 const vueScript = document.createElement('script')
 vueScript.setAttribute('type', 'text/javascript'), vueScript.setAttribute('src', 'https://unpkg.com/vue'), vueScript.onload = init, document.head.appendChild(vueScript), document.head.appendChild(styles)
-const ifSnap = process.env.SNAP
 
+const ifSnap = process.env.SNAP
 const store = new Store()
 let getColorsFromStore = store.get('colors') ? store.get('colors') : []
 
@@ -19,7 +20,60 @@ function pushColor(color) {
     getColorsFromStore.unshift(colorObj)
 }
 
+function showToast(timeout) {
+    document.getElementById('copy-toast').style.display = 'block'
+    setTimeout(() => {
+        document.getElementById('copy-toast').style.display = 'none'
+    }, timeout)
+}
+
 function init() {
+    let keyboardTimeout, keyboardOpt;
+    const keyboardJS = require('keyboardjs')
+    keyboardJS.bind('', e => {
+        if (keyboardTimeout !== undefined) clearTimeout(keyboardTimeout)
+        keyboardTimeout = setTimeout(() => { mykeyboard(e) }, 1000)
+    })
+    keyboardJS.pause()
+
+    function mykeyboard(e) {
+        if (keyboardOpt !== undefined) {
+            if (keyboardOpt === 'color_pick') {
+                setOption(e, 'shortuct.colorPick')
+            } else if (keyboardOpt === 'last_pick') {
+                setOption(e, 'shortuct.pickLast')
+            }
+    
+            if (e.code === 'Escape') {
+                keyboardJS.pause()
+            }
+        }
+    }
+    
+    function setOption(keyboard, option) {
+        let finalOption = ''
+        if (keyboard.altKey) {
+            finalOption = finalOption + 'Alt+'
+        } 
+        
+        if (keyboard.ctrlKey) {
+            finalOption = finalOption + 'CommandOrControl+'
+        } 
+        
+        if (keyboard.shiftKey) {
+            finalOption = finalOption + 'Shift+'
+        }
+    
+        finalOption = finalOption + keyboard.key
+        store.set(option, finalOption)
+        if (option === 'shortuct.colorPick') {
+            myVue.globalColorPick = finalOption
+        } else if (option === 'shortuct.pickLast') {
+            myVue.globalPickLast = finalOption
+        }
+        keyboardJS.pause()
+    }
+
     ipcRenderer.on('closewindow', (event, args) => {
         store.set('colors', getColorsFromStore)
     })
@@ -66,18 +120,19 @@ function init() {
 
     var myVue = new Vue({
         data: {
+            toastMessage: '',
             colors: getColorsFromStore,
             autoStartOpt: ifSnap,
+            globalColorPick: store.get('shortuct.colorPick') ? store.get('shortuct.colorPick') : 'CommandOrControl+Shift+C',
+            globalPickLast: store.get('shortuct.pickLast') ? store.get('shortuct.pickLast') : 'CommandOrControl+Shift+Z',
             minimizeToTrayOnExit: store.get('settings.minimizeToTrayOnExit') ? store.get('settings.minimizeToTrayOnExit') : false,
             autostartToTray: store.get('settings.autostartToTray') ? store.get('settings.autostartToTray') : false
         },
         methods: {
             copyToClipboard: color => {
-                document.getElementById('copy-toast').style.display = 'block'
+                this.toastMessage = 'Copied to clipboard'
+                showToast(3000)
                 clipboard.writeText(color)
-                setTimeout(() => {
-                    document.getElementById('copy-toast').style.display = 'none'
-                }, 3000)
             },
             clearHistory () {
                 store.delete('colors')
@@ -91,12 +146,29 @@ function init() {
                 document.getElementById('settings-modal').classList.remove('active')
             },
             saveSettings () {
+                keyboardJS.pause()
                 store.set('settings.autostartToTray', this.autostartToTray)
                 store.set('settings.minimizeToTrayOnExit', this.minimizeToTrayOnExit)
                 document.getElementById('settings-modal').classList.remove('active')
+
+                if (keyboardOpt !== undefined) {
+                    keyboardOpt = undefined
+                    remote.app.relaunch()
+                    remote.app.exit()
+                }
             },
             openGithub () {
                 shell.openExternal('https://github.com')
+            },
+            colorPickShortcutChange () {
+                this.globalColorPick = 'Start keyboard capture...'
+                keyboardOpt = 'color_pick'
+                keyboardJS.resume()
+            },
+            lastPickShortcutChange () {
+                this.globalPickLast = 'Start keyboard capture...'
+                keyboardOpt = 'last_pick'
+                keyboardJS.resume()
             }
         },
         template: `
@@ -113,8 +185,8 @@ function init() {
                 </div>
                 <div class="panel-body">
                     <div class="center-info" v-if="this.colors.length === 0">
-                        <p><b>Point</b> and <kbd>control/command + shift + c</kbd> to pick a color.</p>
-                        <p><kbd>control/command + shift + z</kbd> to copy last picked color.</p>
+                        <p><b>Point</b> and <kbd>{{ this.globalColorPick }}</kbd> to pick a color.</p>
+                        <p><kbd>{{ this.globalPickLast }}</kbd> to copy last picked color.</p>
                     </div>
                     <div class="container">
                         <div id="colors-container" class="columns">
@@ -130,7 +202,7 @@ function init() {
                 </div>
             </div>
             <div id="copy-toast" class="toast" style="width: 200px; position: absolute; bottom: 20px; right: 20px; display: none;">
-                Copied to clipboard
+                {{ this.toastMessage }}
             </div>
             <div class="modal modal-sm" id="settings-modal">
                 <a v-on:click="hideSettings" class="modal-overlay" aria-label="Close"></a>
@@ -150,6 +222,16 @@ function init() {
                                     <input type="checkbox" v-model="minimizeToTrayOnExit">
                                     <i class="form-icon"></i> Minimize to tray on exit
                                 </label>
+                                <label>Color Pick Shortcut</label>
+                                <div class="input-group" style="margin-bottom: 10px;">
+                                    <span class="input-group-addon shortcut-span">{{ this.globalColorPick }}</span>
+                                    <button class="btn btn-primary input-group-btn" v-on:click="colorPickShortcutChange">Change</button>
+                                </div>
+                                <label>Last Pick Shortcut</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon shortcut-span">{{ this.globalPickLast }}</span>
+                                    <button class="btn btn-primary input-group-btn" v-on:click="lastPickShortcutChange">Change</button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -2,11 +2,11 @@
   "name": "pall",
   "description": "Pick a color. Anywhere.",
   "author": {
-    "name": "Dani A. Ona", 
+    "name": "Dani A. Ona",
     "url": "https:://dandansoysauce.github.io",
     "email": "ona.dani.a@gmail.com"
   },
-  "version": "1.2.1",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "electron-webpack dev",
@@ -20,11 +20,12 @@
     "electron-window-state": "^5.0.3",
     "hex2rgb": "^2.2.0",
     "jimp": "^0.6.0",
+    "keyboardjs": "^2.5.1",
     "source-map-support": "^0.5.9"
   },
   "devDependencies": {
-    "electron": "3.0.10",
-    "electron-builder": "^20.36.2",
+    "electron": "4.0.0",
+    "electron-builder": "20.38.4",
     "electron-webpack": "^2.6.1",
     "webpack": "^4.26.0"
   },
@@ -40,9 +41,23 @@
     },
     "linux": {
       "target": [
-        { "target": "snap" },
-        { "target": "AppImage", "arch": ["x64", "ia32"] },
-        { "target": "deb", "arch": ["x64", "ia32"] }
+        {
+          "target": "snap"
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ],
       "publish": "github"
     }
