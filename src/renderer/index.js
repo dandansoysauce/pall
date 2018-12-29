@@ -20,27 +20,60 @@ function pushColor(color) {
     getColorsFromStore.unshift(colorObj)
 }
 
-let keyboardTimeout, keyboardOpt;
-const keyboardJS = require('keyboardjs')
-keyboardJS.bind('', e => {
-    if (keyboardTimeout !== undefined) clearTimeout(keyboardTimeout)
-    keyboardTimeout = setTimeout(() => { mykeyboard(e) }, 1000)
-})
-keyboardJS.pause()
-
-function mykeyboard(e) {
-    if (keyboardOpt !== undefined) {
-        if (keyboardOpt === 'color_pick') {
-            console.log('color pick shortcut', e)
-        } else if (keyboardOpt === 'last_pick') {
-            console.log('last pick shortcut', e)
-        }
-    }
-
-    keyboardJS.pause()
+function showToast(timeout) {
+    document.getElementById('copy-toast').style.display = 'block'
+    setTimeout(() => {
+        document.getElementById('copy-toast').style.display = 'none'
+    }, timeout)
 }
 
 function init() {
+    let keyboardTimeout, keyboardOpt;
+    const keyboardJS = require('keyboardjs')
+    keyboardJS.bind('', e => {
+        if (keyboardTimeout !== undefined) clearTimeout(keyboardTimeout)
+        keyboardTimeout = setTimeout(() => { mykeyboard(e) }, 1000)
+    })
+    keyboardJS.pause()
+
+    function mykeyboard(e) {
+        if (keyboardOpt !== undefined) {
+            if (keyboardOpt === 'color_pick') {
+                setOption(e, 'shortuct.colorPick')
+            } else if (keyboardOpt === 'last_pick') {
+                setOption(e, 'shortuct.pickLast')
+            }
+    
+            if (e.code === 'Escape') {
+                keyboardJS.pause()
+            }
+        }
+    }
+    
+    function setOption(keyboard, option) {
+        let finalOption = ''
+        if (keyboard.altKey) {
+            finalOption = finalOption + 'Alt+'
+        } 
+        
+        if (keyboard.ctrlKey) {
+            finalOption = finalOption + 'CommandOrControl+'
+        } 
+        
+        if (keyboard.shiftKey) {
+            finalOption = finalOption + 'Shift+'
+        }
+    
+        finalOption = finalOption + keyboard.key
+        store.set(option, finalOption)
+        if (option === 'shortuct.colorPick') {
+            myVue.globalColorPick = finalOption
+        } else if (option === 'shortuct.pickLast') {
+            myVue.globalPickLast = finalOption
+        }
+        keyboardJS.pause()
+    }
+
     ipcRenderer.on('closewindow', (event, args) => {
         store.set('colors', getColorsFromStore)
     })
@@ -87,6 +120,7 @@ function init() {
 
     var myVue = new Vue({
         data: {
+            toastMessage: '',
             colors: getColorsFromStore,
             autoStartOpt: ifSnap,
             globalColorPick: store.get('shortuct.colorPick') ? store.get('shortuct.colorPick') : 'CommandOrControl+Shift+C',
@@ -96,11 +130,9 @@ function init() {
         },
         methods: {
             copyToClipboard: color => {
-                document.getElementById('copy-toast').style.display = 'block'
+                this.toastMessage = 'Copied to clipboard'
+                showToast(3000)
                 clipboard.writeText(color)
-                setTimeout(() => {
-                    document.getElementById('copy-toast').style.display = 'none'
-                }, 3000)
             },
             clearHistory () {
                 store.delete('colors')
@@ -129,10 +161,12 @@ function init() {
                 shell.openExternal('https://github.com')
             },
             colorPickShortcutChange () {
+                this.globalColorPick = 'Start keyboard capture...'
                 keyboardOpt = 'color_pick'
                 keyboardJS.resume()
             },
             lastPickShortcutChange () {
+                this.globalPickLast = 'Start keyboard capture...'
                 keyboardOpt = 'last_pick'
                 keyboardJS.resume()
             }
@@ -168,7 +202,7 @@ function init() {
                 </div>
             </div>
             <div id="copy-toast" class="toast" style="width: 200px; position: absolute; bottom: 20px; right: 20px; display: none;">
-                Copied to clipboard
+                {{ this.toastMessage }}
             </div>
             <div class="modal modal-sm" id="settings-modal">
                 <a v-on:click="hideSettings" class="modal-overlay" aria-label="Close"></a>
