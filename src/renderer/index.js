@@ -158,7 +158,10 @@ function init() {
                 }
             },
             openGithub () {
-                shell.openExternal('https://github.com')
+                shell.openExternal('https://github.com/dandansoysauce/pall')
+            },
+            buyMeACoffee () {
+                shell.openExternal('https://www.buymeacoffee.com/WLmhc53q0')
             },
             colorPickShortcutChange () {
                 this.globalColorPick = 'Start keyboard capture...'
@@ -178,6 +181,7 @@ function init() {
                     <div class="panel-title">
                         History
                         <a class="float-right link-pointer" v-on:click="openGithub"><span class="label label-primary">github</span></a>
+                        <a class="float-right link-pointer" style="margin-right: 5px;" v-on:click="buyMeACoffee"><span class="label label-error">bye me a coffee</span></a>
                     </div>
                 </div>
                 <div class="panel-nav">
