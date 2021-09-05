@@ -6,7 +6,7 @@
     "url": "https:://dandansoysauce.github.io",
     "email": "ona.dani.a@gmail.com"
   },
-  "version": "2.0.2",
+  "version": "3.0.0",
   "license": "MIT",
   "scripts": {
     "dev": "electron-webpack dev",
