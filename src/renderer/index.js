@@ -1,6 +1,6 @@
 'use strict';
-const { ipcRenderer, clipboard, shell, desktopCapturer, screen } = require('electron')
-const remote = require('electron').remote
+const { ipcRenderer, clipboard, shell, desktopCapturer } = require('electron')
+const remote = require('@electron/remote')
 const Store = require('electron-store')
 const Jimp = require('jimp')
 const hex2rgb = require('hex2rgb')
@@ -79,35 +79,25 @@ function init() {
     })
 
     ipcRenderer.on('capture', (event, args) => {
-        let displayHeight = 0
-        let displayWidth = 0
-        const allDisplays = screen.getAllDisplays()
-        const primaryDisplay = screen.getPrimaryDisplay()
-        if (primaryDisplay) {
-            displayHeight = primaryDisplay.size.height
-            displayWidth = primaryDisplay.size.width
-        }
-        const point = screen.getCursorScreenPoint()
-        if (allDisplays.length > 1) {
-            displayWidth = 0
-            displayHeight = Math.max.apply(Math, allDisplays.map(function (o) { return o.size.height }))
-            allDisplays.forEach(display => {
-                displayWidth = displayWidth + display.size.width
-            })
-        }
+        const allDisplays = remote.screen.getAllDisplays()
+        const point = remote.screen.getCursorScreenPoint()
+        const nearestDispaly = remote.screen.getDisplayNearestPoint(point)
+        const targetDisplayIndex = allDisplays.findIndex(display => {
+            return display.id === nearestDispaly.id
+        })
+        const displayPoint = allDisplays[targetDisplayIndex];
+        const screenName = targetDisplayIndex + 1
         const componentToHex = c => {
             const hex = c.toString(16)
             return hex.length === 1 ? "0" + hex : hex
         }
-        desktopCapturer.getSources({types: ['screen'], thumbnailSize: {width: displayWidth, height: displayHeight}}, (error, sources) => {
-            if (error) throw error
-        
+        desktopCapturer.getSources({ types: ['screen'], thumbnailSize: {width: displayPoint.size.width, height: displayPoint.size.height} }).then(sources => {
             for (let i = 0; i < sources.length; ++i) {
-                if (sources[i].name.toLocaleLowerCase() === 'entire screen') {
+                if (sources[i].name === `Screen ${screenName}`) {
                     Jimp.read(sources[i].thumbnail.toPNG(), (err, img) => {
                         if (err) return console.log(err)
-
-                        const pixelColor = img.getPixelColor(point.x, point.y)
+    
+                        const pixelColor = img.getPixelColor(point.x - displayPoint.bounds.x, point.y - displayPoint.bounds.y)
                         const rgbaColor = Jimp.intToRGBA(pixelColor)
                         const hexColorString = `#${componentToHex(rgbaColor.r)}${componentToHex(rgbaColor.g)}${componentToHex(rgbaColor.b)}`
                         clipboard.writeText(hexColorString)
@@ -120,7 +110,7 @@ function init() {
 
     var myVue = new Vue({
         data: {
-            toastMessage: '',
+            toastMessage: 'Copied to clipboard',
             colors: getColorsFromStore,
             autoStartOpt: ifSnap,
             globalColorPick: store.get('shortuct.colorPick') ? store.get('shortuct.colorPick') : 'CommandOrControl+Shift+C',
@@ -130,7 +120,6 @@ function init() {
         },
         methods: {
             copyToClipboard: color => {
-                this.toastMessage = 'Copied to clipboard'
                 showToast(3000)
                 clipboard.writeText(color)
             },

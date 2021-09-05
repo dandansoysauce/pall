@@ -3,6 +3,7 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, Tray, Menu, clipboard, nativeImage } from 'electron'
 import * as path from 'path'
 import { format as formatUrl } from 'url'
+require('@electron/remote/main').initialize()
 const Store = require('electron-store')
 const store = new Store()
 const AutoLaunch = require('auto-launch')
@@ -44,7 +45,12 @@ function createMainWindow() {
     width: mainWindowState.width,
     height: mainWindowState.height,
     icon: appIcon,
-    title: 'Pall - Color Picker'
+    title: 'Pall - Color Picker',
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+    }
   })
 
   window.setMenuBarVisibility(false)
