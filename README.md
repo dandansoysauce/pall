@@ -6,9 +6,9 @@ Pick a color. Anywhere.
 
 ## Usage
 
-![pall gif](https://media.giphy.com/media/6IgmK66Gn8zalvazG0/giphy.gif "pall usage")
+<!-- ![pall gif](https://media.giphy.com/media/6IgmK66Gn8zalvazG0/giphy.gif "pall usage") -->
 
-Point and <kbd>ctrl + shift + c</kbd> - copies the color to the clipboard and saves it.
+Point to wherever on your screen and <kbd>ctrl + shift + c</kbd> - copies the color pointed by the mouse to the clipboard and saves it.
 
 <kbd>ctrl + shift + z</kbd> - copies the last picked color.
 
